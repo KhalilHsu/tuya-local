@@ -1,0 +1,201 @@
+name: Energy recovery ventilator
+products:
+  - id: ru08u3yvrxt5icut
+    manufacturer: Duoyidian
+    model: YD-QR300
+entities:
+  - entity: fan
+    translation_key: ventilation
+    dps:
+      - id: 1
+        type: boolean
+        name: switch
+      - id: 2
+        type: string
+        name: preset_mode
+        mapping:
+          - dps_val: auto
+            value: auto
+          - dps_val: manual
+            value: manual
+
+  # Supply and exhaust are separate speeds. Either can be off while the
+  # unit stays on, so these fans must not use DP1 as their switch.
+  # Stopped still reports as on: otherwise picking a speed while stopped
+  # also sends the on value and replaces the speed just chosen. Writing
+  # off still sends "off" on this DP only.
+  - entity: fan
+    name: Supply fan
+    dps:
+      - id: 101
+        type: string
+        name: switch
+        mapping:
+          - dps_val: "off"
+            value: true
+            hidden: true
+          - dps_val: "off"
+            value: false
+          - dps_val: low
+            value: true
+          - dps_val: mid
+            value: true
+            hidden: true
+          - dps_val: high
+            value: true
+            hidden: true
+          - dps_val: LEV4
+            value: true
+            hidden: true
+          - dps_val: LEV5
+            value: true
+            hidden: true
+      - id: 101
+        type: string
+        name: speed
+        mapping:
+          - dps_val: "off"
+            value: 0
+            hidden: true
+          - dps_val: low
+            value: 20
+          - dps_val: mid
+            value: 40
+          - dps_val: high
+            value: 60
+          - dps_val: LEV4
+            value: 80
+          - dps_val: LEV5
+            value: 100
+
+  - entity: fan
+    name: Exhaust fan
+    dps:
+      - id: 102
+        type: string
+        name: switch
+        mapping:
+          - dps_val: "off"
+            value: true
+            hidden: true
+          - dps_val: "off"
+            value: false
+          - dps_val: low
+            value: true
+          - dps_val: mid
+            value: true
+            hidden: true
+          - dps_val: high
+            value: true
+            hidden: true
+          - dps_val: LEV4
+            value: true
+            hidden: true
+          - dps_val: LEV5
+            value: true
+            hidden: true
+      - id: 102
+        type: string
+        name: speed
+        mapping:
+          - dps_val: "off"
+            value: 0
+            hidden: true
+          - dps_val: low
+            value: 20
+          - dps_val: mid
+            value: 40
+          - dps_val: high
+            value: 60
+          - dps_val: LEV4
+            value: 80
+          - dps_val: LEV5
+            value: 100
+
+  - entity: sensor
+    class: pm25
+    dps:
+      - id: 3
+        type: integer
+        name: sensor
+        unit: ugm3
+        class: measurement
+
+  - entity: sensor
+    class: carbon_dioxide
+    dps:
+      - id: 6
+        type: integer
+        name: sensor
+        unit: ppm
+        class: measurement
+
+  - entity: sensor
+    class: volatile_organic_compounds
+    dps:
+      - id: 7
+        type: integer
+        name: sensor
+        unit: mg/m³
+        class: measurement
+        mapping:
+          - scale: 100
+
+  - entity: sensor
+    class: temperature
+    dps:
+      - id: 9
+        type: integer
+        name: sensor
+        unit: C
+        class: measurement
+
+  - entity: sensor
+    translation_key: filter_life
+    category: diagnostic
+    dps:
+      - id: 11
+        type: integer
+        name: sensor
+        unit: "%"
+        class: measurement
+
+  - entity: switch
+    translation_key: uv_sterilization
+    category: config
+    dps:
+      - id: 4
+        type: boolean
+        name: switch
+
+  - entity: switch
+    translation_key: ionizer
+    category: config
+    dps:
+      - id: 5
+        type: boolean
+        name: switch
+
+  - entity: button
+    translation_key: filter_reset
+    category: config
+    dps:
+      - id: 13
+        type: boolean
+        name: button
+
+  - entity: switch
+    name: Bypass
+    category: config
+    dps:
+      - id: 41
+        type: boolean
+        name: switch
+
+  - entity: switch
+    name: Aux heat
+    category: config
+    dps:
+      - id: 42
+        type: boolean
+        name: switch
